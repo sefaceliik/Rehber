@@ -6,3 +6,19 @@
 //
 
 import Foundation
+
+
+class PersonX{
+    
+    var nameOfPerson : String = ""
+    var surnameOfPerson : String = ""
+    var birthdateOfPerson : String = ""
+    var emailOfPerson : String = ""
+    var phoneOfPerson : String = ""
+    var noteOfPerson : String = ""
+    var idOfPerson : UUID?
+    
+    
+    
+    
+}

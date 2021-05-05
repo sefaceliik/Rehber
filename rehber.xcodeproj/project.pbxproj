@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		52511623264013AE00C0647F /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52511622264013AE00C0647F /* DetailViewController.swift */; };
 		52A00332263F019F0030F89D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A00331263F019F0030F89D /* AppDelegate.swift */; };
 		52A00334263F019F0030F89D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A00333263F019F0030F89D /* SceneDelegate.swift */; };
 		52A00336263F019F0030F89D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A00335263F019F0030F89D /* ViewController.swift */; };
@@ -15,6 +16,10 @@
 		52A0033E263F01A20030F89D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52A0033C263F01A20030F89D /* LaunchScreen.storyboard */; };
 		52A00349263F01A20030F89D /* rehberTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A00348263F01A20030F89D /* rehberTests.swift */; };
 		52A00354263F01A20030F89D /* rehberUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A00353263F01A20030F89D /* rehberUITests.swift */; };
+		52A00362263F025F0030F89D /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A00361263F025F0030F89D /* HomeTableViewCell.swift */; };
+		52A9343F264175A9007D08F9 /* core.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 52A9343D264175A9007D08F9 /* core.xcdatamodeld */; };
+		52A9344326419D0F007D08F9 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A9344226419D0F007D08F9 /* Person.swift */; };
+		52A934452642A867007D08F9 /* SuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A934442642A867007D08F9 /* SuccessViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		52511622264013AE00C0647F /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		52A0032E263F019F0030F89D /* rehber.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rehber.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		52A00331263F019F0030F89D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		52A00333263F019F0030F89D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +55,10 @@
 		52A0034F263F01A20030F89D /* rehberUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = rehberUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		52A00353263F01A20030F89D /* rehberUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rehberUITests.swift; sourceTree = "<group>"; };
 		52A00355263F01A20030F89D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		52A00361263F025F0030F89D /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
+		52A9343E264175A9007D08F9 /* core.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = core.xcdatamodel; sourceTree = "<group>"; };
+		52A9344226419D0F007D08F9 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
+		52A934442642A867007D08F9 /* SuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +116,11 @@
 				52A0033A263F01A20030F89D /* Assets.xcassets */,
 				52A0033C263F01A20030F89D /* LaunchScreen.storyboard */,
 				52A0033F263F01A20030F89D /* Info.plist */,
+				52A00361263F025F0030F89D /* HomeTableViewCell.swift */,
+				52511622264013AE00C0647F /* DetailViewController.swift */,
+				52A9343D264175A9007D08F9 /* core.xcdatamodeld */,
+				52A9344226419D0F007D08F9 /* Person.swift */,
+				52A934442642A867007D08F9 /* SuccessViewController.swift */,
 			);
 			path = rehber;
 			sourceTree = "<group>";
@@ -260,6 +275,11 @@
 			files = (
 				52A00336263F019F0030F89D /* ViewController.swift in Sources */,
 				52A00332263F019F0030F89D /* AppDelegate.swift in Sources */,
+				52A00362263F025F0030F89D /* HomeTableViewCell.swift in Sources */,
+				52511623264013AE00C0647F /* DetailViewController.swift in Sources */,
+				52A9344326419D0F007D08F9 /* Person.swift in Sources */,
+				52A9343F264175A9007D08F9 /* core.xcdatamodeld in Sources */,
+				52A934452642A867007D08F9 /* SuccessViewController.swift in Sources */,
 				52A00334263F019F0030F89D /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -593,6 +613,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		52A9343D264175A9007D08F9 /* core.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				52A9343E264175A9007D08F9 /* core.xcdatamodel */,
+			);
+			currentVersion = 52A9343E264175A9007D08F9 /* core.xcdatamodel */;
+			path = core.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 52A00326263F019F0030F89D /* Project object */;
 }

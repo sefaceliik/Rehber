@@ -9,12 +9,21 @@ import UIKit
 
 class SuccessViewController: UIViewController {
 
+    @IBOutlet weak var successView: UIView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        successView.layer.cornerRadius = successView.frame.height / 3
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapp))
+        view.addGestureRecognizer(tap)
     }
     
+    @objc func tapp(){
+        //performSegue(withIdentifier: "fromSuccessToDetails", sender: nil)
+        self.dismiss(animated: true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation
