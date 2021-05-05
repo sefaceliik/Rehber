@@ -26,7 +26,11 @@ class ViewController: UIViewController {
     var noteArray = [String]()
     var uuidArray = [UUID]()
     
+    
+    var sortedNameArray = [String]()
+    var tempNameArray = [String]()
     var searchedNames = [String]()
+    var indexHolder = [Int]()
     
     var isSearching = false
     
@@ -117,6 +121,10 @@ class ViewController: UIViewController {
             print("error")
         }
         
+        
+        nameArray = bubbleSort(arr: nameArray)
+    
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -128,9 +136,65 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    
+    func bubbleSort (arr: [String]) -> [String]{
+        
+        var array = arr
+        for _ in 0..<array.count-1{
+            for j in 0..<array.count-1{
+                
+                if (array[j] > array[j+1]) {
+                    
+                    var temp = array[j]
+                    array[j] = array[j+1]
+                    array[j+1] = temp
+                    
+                    temp = surnameArray[j]
+                    surnameArray[j] = surnameArray[j+1]
+                    surnameArray[j+1] = temp
+                    
+                    temp = birthdateArray[j]
+                    birthdateArray[j] = birthdateArray[j+1]
+                    birthdateArray[j+1] = temp
+                    
+                    temp = emailArray [j]
+                    emailArray[j] = emailArray[j+1]
+                    emailArray[j+1] = temp
+                    
+                    temp = codeArray[j]
+                    codeArray[j] = codeArray[j+1]
+                    codeArray[j+1] = temp
+                    
+                    temp = phoneArray[j]
+                    phoneArray[j] = phoneArray[j+1]
+                    phoneArray[j+1] = temp
+                    
+                    temp = noteArray[j]
+                    noteArray[j] = noteArray[j+1]
+                    noteArray[j+1] = temp
+                    
+                    var tempo = uuidArray[j]
+                    uuidArray[j] = uuidArray[j+1]
+                    uuidArray[j+1] = tempo
+                }
+            }
+        }
+     
+        return array
+    }
+
   
 }
 
+
+
+
+
+
+
+
+// TableView
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -148,19 +212,28 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
         
         if isSearching{
-            cell.nameLabel.text = searchedNames[indexPath.row]
+            cell.nameLabel.text = "\(nameArray[indexHolder[indexPath.row]]) \(surnameArray[indexHolder[indexPath.row]])"
+            cell.birthdayLabel.text = birthdateArray[indexHolder[indexPath.row]]
+            cell.emailLabel.text = emailArray[indexHolder[indexPath.row]]
+            cell.phoneNumberLabel.text = "\(codeArray[indexHolder[indexPath.row]]) \(phoneArray[indexHolder[indexPath.row]])"
         } else {
             //print(people[indexPath.row].nameOfPerson)
             cell.nameLabel.text = "\(nameArray[indexPath.row]) \(surnameArray[indexPath.row])"
             cell.birthdayLabel.text = birthdateArray[indexPath.row]
             cell.emailLabel.text = emailArray[indexPath.row]
             cell.phoneNumberLabel.text = "\(codeArray[indexPath.row]) \(phoneArray[indexPath.row])"
+            
+            /*cell.nameLabel.text = "\(sortedNameArray[indexPath.row]) \(surnameArray[indexPath.row])"
+            cell.birthdayLabel.text = birthdateArray[indexPath.row]
+            cell.emailLabel.text = emailArray[indexPath.row]
+            cell.phoneNumberLabel.text = "\(codeArray[indexPath.row]) \(phoneArray[indexPath.row])"*/
         }
         
         
         
         return cell
     }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
@@ -226,6 +299,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     }
 }
 
+
+
+
+
+// SearchBar
 extension ViewController: UISearchBarDelegate{
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
@@ -237,8 +315,33 @@ extension ViewController: UISearchBarDelegate{
             print(" Arama Sonucu : \(searchText)")
             isSearching = true
             searchedNames = nameArray.filter({$0.lowercased().contains(searchText.lowercased())})
+            
+            /*for k in 0...nameArray.count-1{
+                var x = nameArray[k].lowercased()
+                tempNameArray.append(x)
+            }*/
+            
+            indexHolder.removeAll()
+            var i = 0
+            
+            while i < nameArray.count {
+                
+                var j = 0
+                while j < searchedNames.count {
+                    
+                    if  searchedNames[j] == nameArray[i]{
+                        indexHolder.append(i)
+                    }
+                    
+                    j = j + 1
+                }
+                
+                i = i + 1
+            }
         }
         
         tableView.reloadData()
     }
 }
+
+

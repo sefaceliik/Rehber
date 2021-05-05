@@ -127,8 +127,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         
         
         
-        newPerson.setValue(nameField.text, forKey: "name")
-        newPerson.setValue(surnameField.text, forKey: "surname")
+        newPerson.setValue(nameField.text!.capitalizingFirstLetter(), forKey: "name")
+        newPerson.setValue(surnameField.text!.capitalizingFirstLetter(), forKey: "surname")
         newPerson.setValue(birthdayField.text, forKey: "birthdate")
         newPerson.setValue(emailField.text, forKey: "email")
         newPerson.setValue(codeField.text, forKey: "code")
@@ -477,6 +477,14 @@ extension DetailViewController{
     
 }
 
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
 
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
+}
 
 
