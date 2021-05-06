@@ -45,6 +45,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     var listOfCountryCodes = ["+90","+1"]
     var selectedName = ""
     var selectedId : UUID?
+    var existPerson = false
+    var idString : String?
     
     let datePicker = UIDatePicker()
     
@@ -63,6 +65,13 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         dissmissClosePickerView()
         
         if selectedName != ""{
+            existPerson = true
+        } else {
+            existPerson = false
+        }
+        
+        //if selectedName != ""{
+        if existPerson{
             // take data
             
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -118,11 +127,45 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     
     func savingCoreData(){
         
+        if existPerson{
+            
+            let idString = selectedId!.uuidString
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
+            fetchRequest.predicate = NSPredicate(format: "id = %@", idString)
+            fetchRequest.returnsObjectsAsFaults = false
+            
+            do{
+                let results = try context.fetch(fetchRequest)
+                if results.count > 0{
+                    
+                    for result in results as! [NSManagedObject] {
+                        if let id = result.value(forKey: "id") as? UUID{
+                            context.delete(result)
+                           
+                             
+                            do{
+                                try context.save()
+                            } catch{
+                                print("error")
+                            }
+                        }
+                    }
+                }
+            } catch{
+                
+            }
+        }
+        
+        
+        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
         
         let newPerson = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context)
-        var newNumber = ""
         
         
         

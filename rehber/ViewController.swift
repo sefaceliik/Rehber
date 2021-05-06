@@ -10,13 +10,13 @@ import CoreData
 
 class ViewController: UIViewController {
     
-    
+    // UI
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
     
-    //var dataPerson = PersonX()
-    //var people = [PersonX]()
+    
+    // Arrays
     var nameArray = [String]()
     var surnameArray = [String]()
     var birthdateArray = [String]()
@@ -27,20 +27,31 @@ class ViewController: UIViewController {
     var uuidArray = [UUID]()
     
     
-    var sortedNameArray = [String]()
-    var tempNameArray = [String]()
-    var searchedNames = [String]()
-    var indexHolder = [Int]()
+    // Section Vars
+    var namesDict = [String : [String]]()
+    var birthdateDict = [String : [String]]()
+    var emailDict = [String : [String]]()
+    var phoneNumberDict = [String : [String]]()
+    var codeDict = [String : [String]]()
+    var phoneDict = [String: [String]]()
+    var nameSectionTitles = [String]()
+    let indexTitles = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Ç", "Ş"]
     
+    // Search Vars
+    var searchedNames = [String]()
+    var searchedSurnames = [String]()
+    var indexHolder = [Int]()
     var isSearching = false
     
     
-    
-    
-    
-    var selectedID: UUID?
+    // Segue Vars
     var chosenId : UUID?
     var chosenName = ""
+    
+    
+    
+    
+    
     
     
     override func viewDidLoad() {
@@ -56,12 +67,74 @@ class ViewController: UIViewController {
         
         
         getData()
+        createNameDict()
         
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(getData), name: NSNotification.Name("NewPerson"), object: nil)
     }
+    
+    
+    
+    
+    
+    func createNameDict(){
+        for (index,name) in nameArray.enumerated(){
+            
+            let firstLetterIndex = name.index(name.startIndex, offsetBy: 1)
+            let nameKey = String(name[..<firstLetterIndex])
+            
+            
+            if var nameValues = namesDict[nameKey] {
+                
+                nameValues.append(name)
+                namesDict[nameKey] = nameValues
+                if var birthdateValues = birthdateDict[nameKey]{
+                    
+                    birthdateValues.append(birthdateArray[index])
+                    birthdateDict[nameKey] = birthdateValues
+                    
+                    if var emailValues = emailDict[nameKey]{
+                        
+                        emailValues.append(emailArray[index])
+                        emailDict[nameKey] = emailValues
+                        
+                        if var phoneNumberValues = phoneNumberDict[nameKey]{
+                            
+                            if var phoneValues = phoneDict[nameKey]{
+                                
+                                phoneValues.append(phoneArray[index])
+                                phoneDict[nameKey] = phoneValues
+                            }
+                            
+                            if var codeValues = codeDict[nameKey]{
+                                
+                                codeValues.append(codeArray[index])
+                                codeDict[nameKey] = codeValues
+                            }
+                            
+                        }
+                    }
+                }
+            }else{
+                namesDict[nameKey] = [name]
+                birthdateDict[nameKey] = [birthdateArray[index]]
+                emailDict[nameKey] = [emailArray[index]]
+                codeDict[nameKey] = [codeArray[index]]
+                phoneDict[nameKey] = [phoneArray[index]]
+            }
+            
+        }
+        
+        nameSectionTitles = [String](namesDict.keys)
+        nameSectionTitles = nameSectionTitles.sorted(by: { $0 < $1
+        })
+    }
+    
+    
+    
     
 
     @IBAction func addButtonClicked(_ sender: Any) {
@@ -74,7 +147,6 @@ class ViewController: UIViewController {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
-        //people.removeAll()
         
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
         request.returnsObjectsAsFaults = false
@@ -112,7 +184,6 @@ class ViewController: UIViewController {
                         self.uuidArray.append(id)
                         print(id)
                     }
-                    //people.append(dataPerson)
                     
                 }
             }
@@ -136,6 +207,8 @@ class ViewController: UIViewController {
         }
         
     }
+    
+    
     
     
     func bubbleSort (arr: [String]) -> [String]{
@@ -193,46 +266,105 @@ class ViewController: UIViewController {
 
 
 
-
 // TableView
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        guard let index = nameSectionTitles.index(of: title) else { return -1 }
+        
+        return index
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return nameSectionTitles.count
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return nameSectionTitles[section]
+    }
+    
+    
+    
+    
+    func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return indexTitles
+    }
+    
+    
+    
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        if isSearching{
+        /*if isSearching{
             return searchedNames.count
         } else {
             return nameArray.count
-        }
+        }*/
+        
+        let nameKey = nameSectionTitles[section]
+        guard let nameValues = namesDict[nameKey] else { return 0}
+        
+        return nameValues.count
         
     }
     
+    
+    
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Reuse") as! HomeTableViewCell
+        
+        var phoneNumber : String
+        var code : String
     
         
-        if isSearching{
+        let nameKey = nameSectionTitles[indexPath.section]
+        if let nameValues = namesDict[nameKey]{
+            cell.nameLabel.text = nameValues[indexPath.row]
+        }
+        
+        if let birthdateValues = birthdateDict[nameKey]{
+            cell.birthdayLabel.text = birthdateValues[indexPath.row]
+        }
+        
+        if let emailValues = emailDict[nameKey]{
+            cell.emailLabel.text = emailValues[indexPath.row]
+        }
+        
+        if let phoneValues = phoneDict[nameKey]{
+            // phoneNumber = phoneValues[indexPath.row]
+        }
+        
+        if let codeValues = codeDict[nameKey]{
+            //code = codeValues[indexPath.row]
+            //cell.phoneNumberLabel.text = "\(code) \(phoneNumber)"
+        }
+        
+        
+        
+        
+        /*if isSearching{
             cell.nameLabel.text = "\(nameArray[indexHolder[indexPath.row]]) \(surnameArray[indexHolder[indexPath.row]])"
             cell.birthdayLabel.text = birthdateArray[indexHolder[indexPath.row]]
             cell.emailLabel.text = emailArray[indexHolder[indexPath.row]]
             cell.phoneNumberLabel.text = "\(codeArray[indexHolder[indexPath.row]]) \(phoneArray[indexHolder[indexPath.row]])"
         } else {
-            //print(people[indexPath.row].nameOfPerson)
+            
             cell.nameLabel.text = "\(nameArray[indexPath.row]) \(surnameArray[indexPath.row])"
             cell.birthdayLabel.text = birthdateArray[indexPath.row]
             cell.emailLabel.text = emailArray[indexPath.row]
             cell.phoneNumberLabel.text = "\(codeArray[indexPath.row]) \(phoneArray[indexPath.row])"
             
-            /*cell.nameLabel.text = "\(sortedNameArray[indexPath.row]) \(surnameArray[indexPath.row])"
-            cell.birthdayLabel.text = birthdateArray[indexPath.row]
-            cell.emailLabel.text = emailArray[indexPath.row]
-            cell.phoneNumberLabel.text = "\(codeArray[indexPath.row]) \(phoneArray[indexPath.row])"*/
-        }
+        }*/
         
         
         
         return cell
     }
+    
+    
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -241,6 +373,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         chosenId = uuidArray[indexPath.row]
         performSegue(withIdentifier: "toDetailVC", sender: nil)
     }
+    
+    
+    
+    
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
     
@@ -293,10 +429,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    /*func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 160
         
-    }
+    }*/
 }
 
 
@@ -315,11 +451,7 @@ extension ViewController: UISearchBarDelegate{
             print(" Arama Sonucu : \(searchText)")
             isSearching = true
             searchedNames = nameArray.filter({$0.lowercased().contains(searchText.lowercased())})
-            
-            /*for k in 0...nameArray.count-1{
-                var x = nameArray[k].lowercased()
-                tempNameArray.append(x)
-            }*/
+            searchedSurnames = surnameArray.filter({$0.lowercased().contains(searchText.lowercased())})
             
             indexHolder.removeAll()
             var i = 0

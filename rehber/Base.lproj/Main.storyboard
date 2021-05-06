@@ -27,11 +27,11 @@
                                 <rect key="frame" x="0.0" y="179" width="414" height="683"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Reuse" rowHeight="215" id="gMo-TX-FUi" customClass="HomeTableViewCell" customModule="rehber" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="24.5" width="414" height="215"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Reuse" id="gMo-TX-FUi" customClass="HomeTableViewCell" customModule="rehber" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="24.5" width="414" height="179.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gMo-TX-FUi" id="e8S-tE-1I0">
-                                            <rect key="frame" x="0.0" y="0.0" width="414" height="215"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="179.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sefa Çelik" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K41-IR-Tdn">
@@ -44,7 +44,7 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--------------------------------------------------------------------------------------------------" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mct-s4-FmZ">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--------------------------------------------------------------------------------------------------" textAlignment="natural" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mct-s4-FmZ">
                                                     <rect key="frame" x="20.5" y="40" width="373" height="21"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
@@ -95,7 +95,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Telefon Numarası" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K8w-iG-aO8">
-                                                    <rect key="frame" x="20.5" y="127" width="186.5" height="21"/>
+                                                    <rect key="frame" x="20.5" y="127" width="186.5" height="21.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="Ygj-Wy-Lfu"/>
@@ -105,7 +105,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+905523601800" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JuX-FH-4XI">
-                                                    <rect key="frame" x="207" y="127" width="186.5" height="21"/>
+                                                    <rect key="frame" x="207" y="127" width="186.5" height="21.5"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="baG-ne-506"/>
@@ -115,8 +115,9 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
-                                            <color key="backgroundColor" systemColor="systemGray4Color"/>
+                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="JuX-FH-4XI" secondAttribute="bottom" constant="20" id="1TD-mP-Zcf"/>
                                                 <constraint firstItem="K8w-iG-aO8" firstAttribute="width" secondItem="K41-IR-Tdn" secondAttribute="width" multiplier="0.5" id="8FL-Lb-1ud"/>
                                                 <constraint firstItem="K41-IR-Tdn" firstAttribute="top" secondItem="e8S-tE-1I0" secondAttribute="topMargin" id="AZ0-ZF-V2x"/>
                                                 <constraint firstItem="JuX-FH-4XI" firstAttribute="trailing" secondItem="K41-IR-Tdn" secondAttribute="trailing" id="DBt-5E-ikZ"/>
@@ -130,6 +131,7 @@
                                                 <constraint firstItem="K41-IR-Tdn" firstAttribute="width" secondItem="e8S-tE-1I0" secondAttribute="width" multiplier="0.9" id="XFc-eh-CSo"/>
                                                 <constraint firstItem="WjR-sc-caE" firstAttribute="trailing" secondItem="K41-IR-Tdn" secondAttribute="trailing" id="abm-f9-J4t"/>
                                                 <constraint firstItem="WjR-sc-caE" firstAttribute="width" secondItem="K41-IR-Tdn" secondAttribute="width" multiplier="0.5" id="cfj-Rt-Kyt"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="K8w-iG-aO8" secondAttribute="bottom" constant="20" id="d2j-Wh-37f"/>
                                                 <constraint firstItem="zEU-YZ-zR0" firstAttribute="top" secondItem="mct-s4-FmZ" secondAttribute="bottom" constant="8" symbolic="YES" id="eoK-q7-WYo"/>
                                                 <constraint firstItem="mct-s4-FmZ" firstAttribute="centerX" secondItem="e8S-tE-1I0" secondAttribute="centerX" id="fQx-2Q-Xqh"/>
                                                 <constraint firstItem="K41-IR-Tdn" firstAttribute="centerX" secondItem="e8S-tE-1I0" secondAttribute="centerX" id="fh0-ko-q7r"/>
