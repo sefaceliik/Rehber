@@ -14,33 +14,21 @@ class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var searchBar: UISearchBar!
+    let toolbar = UIToolbar()
     
     
-    // Arrays
-    var nameArray = [String]()
-    var surnameArray = [String]()
-    var birthdateArray = [String]()
-    var emailArray = [String]()
-    var codeArray = [String]()
-    var phoneArray = [String]()
-    var noteArray = [String]()
-    var uuidArray = [UUID]()
+    
     
     
     // Section Vars
-    var namesDict = [String : [String]]()
-    var birthdateDict = [String : [String]]()
-    var emailDict = [String : [String]]()
-    var phoneNumberDict = [String : [String]]()
-    var codeDict = [String : [String]]()
-    var phoneDict = [String: [String]]()
+    var namesDict = [String : [PersonX]]()
     var nameSectionTitles = [String]()
-    let indexTitles = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Ç", "Ş"]
+    var searchedNamesDict = [String : [PersonX]]()
+    var searchedNameSectionTitles = [String]()
+    let indexTitles = ["#","A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Ç", "Ş"]
     
     // Search Vars
-    var searchedNames = [String]()
-    var searchedSurnames = [String]()
-    var indexHolder = [Int]()
+    var searchedNames = [PersonX]()
     var isSearching = false
     
     
@@ -49,6 +37,7 @@ class ViewController: UIViewController {
     var chosenName = ""
     
     
+    var people = [PersonX]()
     
     
     
@@ -65,12 +54,22 @@ class ViewController: UIViewController {
         addButton.layer.cornerRadius = addButton.frame.height / 3
         
         
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: nil, action: #selector(doneButtonClicked))
+        toolbar.sizeToFit()
+        toolbar.setItems([doneButton], animated: true)
+        
+        searchBar.inputAccessoryView = toolbar
+        
         
         getData()
         createNameDict()
         
     }
     
+    @objc func doneButtonClicked(){
+        
+        self.view.endEditing(true)
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         NotificationCenter.default.addObserver(self, selector: #selector(getData), name: NSNotification.Name("NewPerson"), object: nil)
@@ -78,52 +77,20 @@ class ViewController: UIViewController {
     
     
     
-    
-    
     func createNameDict(){
-        for (index,name) in nameArray.enumerated(){
+        for person in people{
             
-            let firstLetterIndex = name.index(name.startIndex, offsetBy: 1)
-            let nameKey = String(name[..<firstLetterIndex])
+            let firstLetterIndex = person.nameOfPerson!.index(person.nameOfPerson!.startIndex, offsetBy: 1)
+            let nameKey = String(person.nameOfPerson![..<firstLetterIndex])
             
             
             if var nameValues = namesDict[nameKey] {
                 
-                nameValues.append(name)
+                nameValues.append(person)
                 namesDict[nameKey] = nameValues
-                if var birthdateValues = birthdateDict[nameKey]{
-                    
-                    birthdateValues.append(birthdateArray[index])
-                    birthdateDict[nameKey] = birthdateValues
-                    
-                    if var emailValues = emailDict[nameKey]{
-                        
-                        emailValues.append(emailArray[index])
-                        emailDict[nameKey] = emailValues
-                        
-                        if var phoneNumberValues = phoneNumberDict[nameKey]{
-                            
-                            if var phoneValues = phoneDict[nameKey]{
-                                
-                                phoneValues.append(phoneArray[index])
-                                phoneDict[nameKey] = phoneValues
-                            }
-                            
-                            if var codeValues = codeDict[nameKey]{
-                                
-                                codeValues.append(codeArray[index])
-                                codeDict[nameKey] = codeValues
-                            }
-                            
-                        }
-                    }
-                }
+                
             }else{
-                namesDict[nameKey] = [name]
-                birthdateDict[nameKey] = [birthdateArray[index]]
-                emailDict[nameKey] = [emailArray[index]]
-                codeDict[nameKey] = [codeArray[index]]
-                phoneDict[nameKey] = [phoneArray[index]]
+                namesDict[nameKey] = [person]
             }
             
         }
@@ -133,6 +100,28 @@ class ViewController: UIViewController {
         })
     }
     
+    func createSurnameDict(){
+        for person in searchedNames{
+            
+            let firstLetterIndex = person.nameOfPerson!.index(person.nameOfPerson!.startIndex, offsetBy: 1)
+            let nameKey = String(person.nameOfPerson![..<firstLetterIndex])
+            
+            
+            if var nameValues = searchedNamesDict[nameKey] {
+                
+                nameValues.append(person)
+                searchedNamesDict[nameKey] = nameValues
+                
+            }else{
+                searchedNamesDict[nameKey] = [person]
+            }
+            
+        }
+        
+        searchedNameSectionTitles = [String](searchedNamesDict.keys)
+        searchedNameSectionTitles = searchedNameSectionTitles.sorted(by: { $0 < $1
+        })
+    }
     
     
     
@@ -143,6 +132,10 @@ class ViewController: UIViewController {
         performSegue(withIdentifier: "toDetailVC", sender: nil)
     }
     
+    
+    
+    
+    
     @objc func getData(){
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -151,41 +144,34 @@ class ViewController: UIViewController {
         let request = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
         request.returnsObjectsAsFaults = false
         
+        
         do{
             
             let results = try context.fetch(request)
             
             if results.count > 0 {
+                
+                var counter = 0
                 for result in results as! [NSManagedObject]{
                     
-                    if let name = result.value(forKey: "name") as? String {
-                        self.nameArray.append(name)
-                        print(name)
-                    }
-                    if let surname = result.value(forKey: "surname") as? String {
-                        self.surnameArray.append(surname)
-                    }
-                    if let birthdate = result.value(forKey: "birthdate") as? String{
-                        self.birthdateArray.append(birthdate)
-                    }
-                    if let email = result.value(forKey: "email") as? String {
-                        self.emailArray.append(email)
-                    }
-                    if let code = result.value(forKey: "code") as? String {
-                        self.codeArray.append(code)
-                    }
-                    if let phone = result.value(forKey: "phone") as? String {
-                        self.phoneArray.append(phone)
-                    }
-                    if let note = result.value(forKey: "note") as? String{
-                        self.noteArray.append(note)
-                    }
-                    if let id = result.value(forKey: "id") as? UUID {
-                        self.uuidArray.append(id)
-                        print(id)
-                    }
                     
+                    let name = result.value(forKey: "name") as? String
+                    let surname = result.value(forKey: "surname") as? String
+                    let birthdate = result.value(forKey: "birthdate") as? String
+                    let email = result.value(forKey: "email") as? String
+                    let code = result.value(forKey: "code") as? String
+                    let phone = result.value(forKey: "phone") as? String
+                    let note = result.value(forKey: "note") as? String
+                    let uuid = result.value(forKey: "id") as? UUID
+                    
+                    let newPerson : PersonX = try PersonX(name: name, surname: surname, birthdate: birthdate, email: email, code: code, phone: phone, note: note, id: uuid)
+                    people.insert(newPerson, at: counter)
+                    counter = counter + 1
+                    people = people.sorted(by: { $0.nameOfPerson! < $1.nameOfPerson! })
+                    
+                
                 }
+                
             }
             
         } catch{
@@ -193,7 +179,6 @@ class ViewController: UIViewController {
         }
         
         
-        nameArray = bubbleSort(arr: nameArray)
     
         
     }
@@ -207,56 +192,6 @@ class ViewController: UIViewController {
         }
         
     }
-    
-    
-    
-    
-    func bubbleSort (arr: [String]) -> [String]{
-        
-        var array = arr
-        for _ in 0..<array.count-1{
-            for j in 0..<array.count-1{
-                
-                if (array[j] > array[j+1]) {
-                    
-                    var temp = array[j]
-                    array[j] = array[j+1]
-                    array[j+1] = temp
-                    
-                    temp = surnameArray[j]
-                    surnameArray[j] = surnameArray[j+1]
-                    surnameArray[j+1] = temp
-                    
-                    temp = birthdateArray[j]
-                    birthdateArray[j] = birthdateArray[j+1]
-                    birthdateArray[j+1] = temp
-                    
-                    temp = emailArray [j]
-                    emailArray[j] = emailArray[j+1]
-                    emailArray[j+1] = temp
-                    
-                    temp = codeArray[j]
-                    codeArray[j] = codeArray[j+1]
-                    codeArray[j+1] = temp
-                    
-                    temp = phoneArray[j]
-                    phoneArray[j] = phoneArray[j+1]
-                    phoneArray[j+1] = temp
-                    
-                    temp = noteArray[j]
-                    noteArray[j] = noteArray[j+1]
-                    noteArray[j+1] = temp
-                    
-                    var tempo = uuidArray[j]
-                    uuidArray[j] = uuidArray[j+1]
-                    uuidArray[j+1] = tempo
-                }
-            }
-        }
-     
-        return array
-    }
-
   
 }
 
@@ -269,24 +204,56 @@ class ViewController: UIViewController {
 // TableView
 extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
-    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
-        guard let index = nameSectionTitles.index(of: title) else { return -1 }
-        
-        return index
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0.0
     }
     
+    func tableView(_ tableView: UITableView, sectionForSectionIndexTitle title: String, at index: Int) -> Int {
+        
+        if isSearching{
+            
+            guard let index = searchedNameSectionTitles.index(of: title) else { return -1 }
+            
+            return index
+            
+        } else{
+            
+            guard let index = nameSectionTitles.index(of: title) else { return -1 }
+            
+            return index
+        }
+        
+    }
+    
+    
     func numberOfSections(in tableView: UITableView) -> Int {
-        return nameSectionTitles.count
+        if isSearching{
+            
+            //return searchedNameSectionTitles.count
+            return 1
+        } else{
+            
+            return nameSectionTitles.count
+        }
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return nameSectionTitles[section]
+        
+        if isSearching{
+            
+            return searchedNameSectionTitles[section]
+        } else{
+            
+            return nameSectionTitles[section]
+        }
+        
     }
     
     
     
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        
         return indexTitles
     }
     
@@ -296,17 +263,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        /*if isSearching{
+        if isSearching{
+            
+            /*let nameKey = searchedNameSectionTitles[section]
+            guard let nameValues = searchedNamesDict[nameKey] else { return 0 }
+            
+            return nameValues.count*/
             return searchedNames.count
         } else {
-            return nameArray.count
-        }*/
-        
-        let nameKey = nameSectionTitles[section]
-        guard let nameValues = namesDict[nameKey] else { return 0}
-        
-        return nameValues.count
-        
+ 
+            let nameKey = nameSectionTitles[section]
+            guard let nameValues = namesDict[nameKey] else { return 0}
+ 
+            return nameValues.count
+        }
     }
     
     
@@ -314,52 +284,62 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "Reuse") as! HomeTableViewCell
         
-        var phoneNumber : String
-        var code : String
-    
         
-        let nameKey = nameSectionTitles[indexPath.section]
-        if let nameValues = namesDict[nameKey]{
-            cell.nameLabel.text = nameValues[indexPath.row]
-        }
-        
-        if let birthdateValues = birthdateDict[nameKey]{
-            cell.birthdayLabel.text = birthdateValues[indexPath.row]
-        }
-        
-        if let emailValues = emailDict[nameKey]{
-            cell.emailLabel.text = emailValues[indexPath.row]
-        }
-        
-        if let phoneValues = phoneDict[nameKey]{
-            // phoneNumber = phoneValues[indexPath.row]
-        }
-        
-        if let codeValues = codeDict[nameKey]{
-            //code = codeValues[indexPath.row]
-            //cell.phoneNumberLabel.text = "\(code) \(phoneNumber)"
-        }
-        
-        
-        
-        
-        /*if isSearching{
-            cell.nameLabel.text = "\(nameArray[indexHolder[indexPath.row]]) \(surnameArray[indexHolder[indexPath.row]])"
-            cell.birthdayLabel.text = birthdateArray[indexHolder[indexPath.row]]
-            cell.emailLabel.text = emailArray[indexHolder[indexPath.row]]
-            cell.phoneNumberLabel.text = "\(codeArray[indexHolder[indexPath.row]]) \(phoneArray[indexHolder[indexPath.row]])"
-        } else {
+        if isSearching{
             
-            cell.nameLabel.text = "\(nameArray[indexPath.row]) \(surnameArray[indexPath.row])"
-            cell.birthdayLabel.text = birthdateArray[indexPath.row]
-            cell.emailLabel.text = emailArray[indexPath.row]
-            cell.phoneNumberLabel.text = "\(codeArray[indexPath.row]) \(phoneArray[indexPath.row])"
             
-        }*/
-        
-        
+            if let name = searchedNames[indexPath.row].nameOfPerson{
+                if let surname = searchedNames[indexPath.row].surnameOfPerson{
+                    
+                    cell.nameLabel.text = "\(name) \(surname)"
+                }
+            }
+            if let birthdate = searchedNames[indexPath.row].birthdateOfPerson{
+                
+                cell.birthdayLabel.text = birthdate
+            }
+            if let email = searchedNames[indexPath.row].emailOfPerson{
+                
+                cell.emailLabel.text = email
+            }
+            if let code = searchedNames[indexPath.row].codeOfPerson{
+                if let phone = searchedNames[indexPath.row].phoneOfPerson{
+                    
+                    cell.phoneNumberLabel.text = "\(code) \(phone)"
+                }
+            }
+            if let note = searchedNames[indexPath.row].noteOfPerson{
+                cell.noteField.text = note
+            }
+            
+        } else{
+            
+            let nameKey = nameSectionTitles[indexPath.section]
+            if let nameValues = namesDict[nameKey] {
+                
+                if let name = nameValues[indexPath.row].nameOfPerson{
+                    if let surname = nameValues[indexPath.row].surnameOfPerson{
+                        
+                        cell.nameLabel.text = "\(name) \(surname)"
+                    }
+                }
+                
+                if let code = nameValues[indexPath.row].codeOfPerson{
+                    if let number = nameValues[indexPath.row].phoneOfPerson{
+                        
+                        cell.phoneNumberLabel.text = "\(code) \(number)"
+                    }
+                }
+                
+                cell.birthdayLabel.text = nameValues[indexPath.row].birthdateOfPerson
+                cell.emailLabel.text = nameValues[indexPath.row].emailOfPerson
+                cell.noteField.text = nameValues[indexPath.row].noteOfPerson
+                
+            }
+        }
         
         return cell
     }
@@ -369,8 +349,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        chosenName = nameArray[indexPath.row]
-        chosenId = uuidArray[indexPath.row]
+        if let name = people[indexPath.row].nameOfPerson{
+            chosenName = name
+        }
+        if let id = people[indexPath.row].idOfPerson{
+            chosenId = id
+        }
         performSegue(withIdentifier: "toDetailVC", sender: nil)
     }
     
@@ -383,7 +367,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
         if editingStyle == .delete {
             // silme işlemi
             
-            let idString = uuidArray[indexPath.row].uuidString
+            let idString = people[indexPath.row].idOfPerson!.uuidString
             
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let context = appDelegate.persistentContainer.viewContext
@@ -399,14 +383,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
                     for result in results as! [NSManagedObject] {
                         if let id = result.value(forKey: "id") as? UUID{
                             context.delete(result)
-                            nameArray.remove(at: indexPath.row)
-                            surnameArray.remove(at: indexPath.row)
-                            birthdateArray.remove(at: indexPath.row)
-                            emailArray.remove(at: indexPath.row)
-                            codeArray.remove(at: indexPath.row)
-                            phoneArray.remove(at: indexPath.row)
-                            noteArray.remove(at: indexPath.row)
-                            uuidArray.remove(at: indexPath.row)
+                            
+                            people.remove(at: indexPath.row)
                             
                             DispatchQueue.main.async {
                                 
@@ -428,11 +406,6 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource{
             
         }
     }
-    
-    /*func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 160
-        
-    }*/
 }
 
 
@@ -444,32 +417,38 @@ extension ViewController: UISearchBarDelegate{
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
+        searchedNames.removeAll()
         if searchText == ""{
             isSearching = false
         } else{
             
             print(" Arama Sonucu : \(searchText)")
             isSearching = true
-            searchedNames = nameArray.filter({$0.lowercased().contains(searchText.lowercased())})
-            searchedSurnames = surnameArray.filter({$0.lowercased().contains(searchText.lowercased())})
             
-            indexHolder.removeAll()
-            var i = 0
-            
-            while i < nameArray.count {
+            for person in people{
                 
-                var j = 0
-                while j < searchedNames.count {
-                    
-                    if  searchedNames[j] == nameArray[i]{
-                        indexHolder.append(i)
-                    }
-                    
-                    j = j + 1
+                if person.nameOfPerson!.contains(searchText){
+                    searchedNames.append(person)
                 }
                 
-                i = i + 1
             }
+            
+            for person in people{
+                
+                if person.surnameOfPerson!.contains(searchText){
+                    
+                    if searchedNames.contains(person){
+                        
+                    } else{
+                        searchedNames.append(person)
+                    }
+                    
+                    
+                }
+                
+            }
+            searchedNames = searchedNames.sorted(by: { $0.nameOfPerson! < $1.nameOfPerson! })
+            
         }
         
         tableView.reloadData()

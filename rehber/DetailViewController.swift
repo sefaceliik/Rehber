@@ -47,6 +47,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     var selectedId : UUID?
     var existPerson = false
     var idString : String?
+    let toolbar = UIToolbar()
     
     let datePicker = UIDatePicker()
     
@@ -63,64 +64,41 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         createDatePicker()
         createPickerView()
         dissmissClosePickerView()
+        segueCheck()
         
-        if selectedName != ""{
-            existPerson = true
-        } else {
-            existPerson = false
-        }
         
-        //if selectedName != ""{
-        if existPerson{
-            // take data
-            
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            let context = appDelegate.persistentContainer.viewContext
-            
-            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
-            let idString = selectedId!.uuidString
-            fetchRequest.predicate = NSPredicate(format: "id = %@", idString)
-            fetchRequest.returnsObjectsAsFaults = false
-            
-            
-            do{
-                let results = try context.fetch(fetchRequest)
-                if results.count > 0 {
-                    for result in results as! [NSManagedObject]{
-                        
-                        if let name = result.value(forKey: "name") as? String{
-                            nameField.text = name
-                        }
-                        if let surname = result.value(forKey: "surname") as? String{
-                            surnameField.text = surname
-                        }
-                        if let birthdate = result.value(forKey: "birthdate") as? String{
-                            birthdayField.text = birthdate
-                        }
-                        if let email = result.value(forKey: "email") as? String{
-                            emailField.text = email
-                        }
-                        if let code = result.value(forKey: "code") as? String{
-                            codeField.text = code
-                        }
-                        if let phone = result.value(forKey: "phone") as? String{
-                            phoneNumberField.text = phone
-                        }
-                        if let note = result.value(forKey: "note") as? String{
-                            notesField.text = note
-                        }
-                    }
-                }
-                
-            } catch{
-                print("error")
-            }
-            
-            
-        } else {
-            // add data
-        }
         
+        
+    }
+    
+    
+    @objc func doneButtonClicked(){
+        
+        self.view.endEditing(true)
+    }
+    
+
+    // UIButton Functions
+    @IBAction func saveButtonClicked(_ sender: Any) {
+        
+        
+       
+        nameValidation()
+        
+    }
+    
+    
+    @IBAction func backButtonClicked(_ sender: Any) {
+        performSegue(withIdentifier: "toMainVC", sender: nil)
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        let numbers = "1234567890"
+        let numbersSet = CharacterSet(charactersIn: numbers)
+        let typedCharacterSet = CharacterSet(charactersIn: string)
+        
+        return numbersSet.isSuperset(of: typedCharacterSet)
     }
     
     
@@ -189,32 +167,82 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+}
+
+
+
+
+extension DetailViewController{
     
-    
-    
-    
-    // UIButton Functions
-    @IBAction func saveButtonClicked(_ sender: Any) {
+    func segueCheck(){
+        if selectedName != ""{
+            existPerson = true
+        } else {
+            existPerson = false
+        }
         
         
-       
-        nameValidation()
-        
+        if existPerson{
+            // take data
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Person")
+            let idString = selectedId!.uuidString
+            fetchRequest.predicate = NSPredicate(format: "id = %@", idString)
+            fetchRequest.returnsObjectsAsFaults = false
+            
+            
+            do{
+                let results = try context.fetch(fetchRequest)
+                if results.count > 0 {
+                    for result in results as! [NSManagedObject]{
+                        
+                        if let name = result.value(forKey: "name") as? String{
+                            nameField.text = name
+                        }
+                        if let surname = result.value(forKey: "surname") as? String{
+                            surnameField.text = surname
+                        }
+                        if let birthdate = result.value(forKey: "birthdate") as? String{
+                            birthdayField.text = birthdate
+                        }
+                        if let email = result.value(forKey: "email") as? String{
+                            emailField.text = email
+                        }
+                        if let code = result.value(forKey: "code") as? String{
+                            codeField.text = code
+                        }
+                        if let phone = result.value(forKey: "phone") as? String{
+                            phoneNumberField.text = phone
+                        }
+                        if let note = result.value(forKey: "note") as? String{
+                            notesField.text = note
+                        }
+                    }
+                }
+                
+            } catch{
+                print("error")
+            }
+            
+            
+        }
     }
     
+}
+
+
+
+
+
+
+
+
+// UI Settings
+extension DetailViewController{
     
-    @IBAction func backButtonClicked(_ sender: Any) {
-        performSegue(withIdentifier: "toMainVC", sender: nil)
-    }
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        
-        let numbers = "1234567890"
-        let numbersSet = CharacterSet(charactersIn: numbers)
-        let typedCharacterSet = CharacterSet(charactersIn: string)
-        
-        return numbersSet.isSuperset(of: typedCharacterSet)
-    }
     
     // UIObjects Settings
     func viewSetting(){
@@ -235,6 +263,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         saveButton.layer.cornerRadius = saveButton.frame.height / 2
         backButton.layer.cornerRadius = backButton.frame.height / 3
         
+        
+        let doneButton = UIBarButtonItem(title: "Done", style: .done, target: nil, action: #selector(doneButtonClicked))
+        toolbar.sizeToFit()
+        toolbar.setItems([doneButton], animated: true)
+        
+        nameField.inputAccessoryView = toolbar
+        surnameField.inputAccessoryView = toolbar
+        emailField.inputAccessoryView = toolbar
+        phoneNumberField.inputAccessoryView = toolbar
+        notesField.inputAccessoryView = toolbar
+        
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = saveButton.bounds
         gradientLayer.colors = [UIColor.systemPurple.cgColor,
@@ -244,10 +283,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         gradientLayer.cornerRadius = gradientLayer.frame.height / 2
         saveButton.layer.addSublayer(gradientLayer)
         
-        
-        
     }
     
+    
+    // UIView Borders
     func defaultBorderWidth(){
         nameView.layer.borderWidth = 0
         surnameView.layer.borderWidth = 0
@@ -257,6 +296,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         noteView.layer.borderWidth = 0
     }
 }
+
+
+
 
 
 // Picker Functions
@@ -312,6 +354,11 @@ extension DetailViewController:  UIPickerViewDelegate, UIPickerViewDataSource {
 
 
 
+
+
+
+
+
 // DatePicker Functions
 extension DetailViewController{
     
@@ -340,6 +387,12 @@ extension DetailViewController{
         self.view.endEditing(true)
     }
 }
+
+
+
+
+
+
 
 // Validation Functions
 extension DetailViewController{
