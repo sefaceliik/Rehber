@@ -18,7 +18,6 @@ class PersonX: Equatable{
         }
     }
     
-    
     var nameOfPerson : String?
     var surnameOfPerson : String?
     var birthdateOfPerson : String?
@@ -39,8 +38,4 @@ class PersonX: Equatable{
         self.noteOfPerson = note
         self.idOfPerson = id
     }
-    
-    
-    
-    
 }

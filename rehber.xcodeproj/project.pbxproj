@@ -109,18 +109,15 @@
 		52A00330263F019F0030F89D /* rehber */ = {
 			isa = PBXGroup;
 			children = (
-				52A00331263F019F0030F89D /* AppDelegate.swift */,
-				52A00333263F019F0030F89D /* SceneDelegate.swift */,
-				52A00335263F019F0030F89D /* ViewController.swift */,
-				52A00337263F019F0030F89D /* Main.storyboard */,
+				52B2F26E2645B5DF00E7ACE0 /* Delegate */,
+				52B2F26D2645B5D000E7ACE0 /* Cell */,
+				52B2F26C2645B5A200E7ACE0 /* ViewController */,
+				52B2F26F2645B5EF00E7ACE0 /* Model */,
 				52A0033A263F01A20030F89D /* Assets.xcassets */,
+				52A00337263F019F0030F89D /* Main.storyboard */,
 				52A0033C263F01A20030F89D /* LaunchScreen.storyboard */,
 				52A0033F263F01A20030F89D /* Info.plist */,
-				52A00361263F025F0030F89D /* HomeTableViewCell.swift */,
-				52511622264013AE00C0647F /* DetailViewController.swift */,
 				52A9343D264175A9007D08F9 /* core.xcdatamodeld */,
-				52A9344226419D0F007D08F9 /* Person.swift */,
-				52A934442642A867007D08F9 /* SuccessViewController.swift */,
 			);
 			path = rehber;
 			sourceTree = "<group>";
@@ -141,6 +138,41 @@
 				52A00355263F01A20030F89D /* Info.plist */,
 			);
 			path = rehberUITests;
+			sourceTree = "<group>";
+		};
+		52B2F26C2645B5A200E7ACE0 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				52A00335263F019F0030F89D /* ViewController.swift */,
+				52511622264013AE00C0647F /* DetailViewController.swift */,
+				52A934442642A867007D08F9 /* SuccessViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		52B2F26D2645B5D000E7ACE0 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				52A00361263F025F0030F89D /* HomeTableViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		52B2F26E2645B5DF00E7ACE0 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				52A00331263F019F0030F89D /* AppDelegate.swift */,
+				52A00333263F019F0030F89D /* SceneDelegate.swift */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
+		52B2F26F2645B5EF00E7ACE0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				52A9344226419D0F007D08F9 /* Person.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

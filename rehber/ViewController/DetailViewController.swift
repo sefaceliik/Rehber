@@ -55,9 +55,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        
-        
         phoneNumberField.delegate = self
         
         viewSetting()
@@ -65,28 +62,18 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         createPickerView()
         dissmissClosePickerView()
         segueCheck()
-        
-        
-        
-        
     }
-    
     
     @objc func doneButtonClicked(){
         
         self.view.endEditing(true)
     }
-    
 
     // UIButton Functions
     @IBAction func saveButtonClicked(_ sender: Any) {
         
-        
-       
         nameValidation()
-        
     }
-    
     
     @IBAction func backButtonClicked(_ sender: Any) {
         performSegue(withIdentifier: "toMainVC", sender: nil)
@@ -100,8 +87,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         
         return numbersSet.isSuperset(of: typedCharacterSet)
     }
-    
-    
     
     func savingCoreData(){
         
@@ -123,7 +108,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
                     for result in results as! [NSManagedObject] {
                         if let id = result.value(forKey: "id") as? UUID{
                             context.delete(result)
-                           
                              
                             do{
                                 try context.save()
@@ -138,15 +122,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
             }
         }
         
-        
-        
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         let context = appDelegate.persistentContainer.viewContext
         
         let newPerson = NSEntityDescription.insertNewObject(forEntityName: "Person", into: context)
-        
-        
-        
         
         newPerson.setValue(nameField.text!.capitalizingFirstLetter(), forKey: "name")
         newPerson.setValue(surnameField.text!.capitalizingFirstLetter(), forKey: "surname")
@@ -181,7 +160,6 @@ extension DetailViewController{
             existPerson = false
         }
         
-        
         if existPerson{
             // take data
             
@@ -192,7 +170,6 @@ extension DetailViewController{
             let idString = selectedId!.uuidString
             fetchRequest.predicate = NSPredicate(format: "id = %@", idString)
             fetchRequest.returnsObjectsAsFaults = false
-            
             
             do{
                 let results = try context.fetch(fetchRequest)
@@ -222,15 +199,11 @@ extension DetailViewController{
                         }
                     }
                 }
-                
             } catch{
                 print("error")
             }
-            
-            
         }
     }
-    
 }
 
 
@@ -242,7 +215,6 @@ extension DetailViewController{
 
 // UI Settings
 extension DetailViewController{
-    
     
     // UIObjects Settings
     func viewSetting(){
@@ -282,9 +254,7 @@ extension DetailViewController{
         gradientLayer.endPoint = CGPoint(x: 1, y: 1)
         gradientLayer.cornerRadius = gradientLayer.frame.height / 2
         saveButton.layer.addSublayer(gradientLayer)
-        
     }
-    
     
     // UIView Borders
     func defaultBorderWidth(){
@@ -297,13 +267,8 @@ extension DetailViewController{
     }
 }
 
-
-
-
-
 // Picker Functions
 extension DetailViewController:  UIPickerViewDelegate, UIPickerViewDataSource {
-    
     
     func createPickerView(){
         
@@ -311,7 +276,6 @@ extension DetailViewController:  UIPickerViewDelegate, UIPickerViewDataSource {
         pickerView.delegate = self
         pickerView.dataSource = self
         self.codeField.inputView = pickerView
-        
     }
     
     func dissmissClosePickerView() {
@@ -349,15 +313,7 @@ extension DetailViewController:  UIPickerViewDelegate, UIPickerViewDataSource {
         self.selectedCountry = self.listOfCountryCodes[row]
         self.codeField.text = self.selectedCountry
     }
-    
 }
-
-
-
-
-
-
-
 
 // DatePicker Functions
 extension DetailViewController{
@@ -388,15 +344,8 @@ extension DetailViewController{
     }
 }
 
-
-
-
-
-
-
 // Validation Functions
 extension DetailViewController{
-    
     
     func nameValidation(){
         if nameField.text != ""{
@@ -430,7 +379,6 @@ extension DetailViewController{
         }
     }
     
-    
     func surnameValidation(){
         if surnameField.text != ""{
             if let surname = surnameField.text{
@@ -463,7 +411,6 @@ extension DetailViewController{
         }
     }
     
-    
     func birthdayValidation(){
         
         if birthdayField.text != ""{
@@ -478,7 +425,6 @@ extension DetailViewController{
             birthdayView.layer.borderColor = UIColor.systemRed.cgColor
         }
     }
-    
     
     func emailValidation(){
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -505,8 +451,6 @@ extension DetailViewController{
             emailView.layer.borderWidth = 1
             emailView.layer.borderColor = UIColor.systemRed.cgColor
         }
-
-        
     }
     
     func phoneNumberValidation(){
@@ -570,7 +514,6 @@ extension DetailViewController{
             }
         }
     }
-    
 }
 
 extension String {
@@ -582,5 +525,3 @@ extension String {
         self = self.capitalizingFirstLetter()
     }
 }
-
-

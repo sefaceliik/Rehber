@@ -31,7 +31,7 @@ class HomeTableViewCell: UITableViewCell {
         
         cellView.layer.cornerRadius = cellView.frame.height / 15
         cellView.layer.shadowOpacity = 0.6
-        cellView.layer.shadowColor = UIColor.black.cgColor
+        cellView.layer.shadowColor = UIColor.purple.cgColor
         cellView.layer.shadowOffset = CGSize(width: 2, height: 2)
         
         noteField.layer.cornerRadius = noteField.frame.height / 12
