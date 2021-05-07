@@ -338,6 +338,7 @@ extension DetailViewController{
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         formatter.timeStyle = .none
+        formatter.dateFormat = "dd/ MM/ yyyy"
         
         birthdayField.text = formatter.string(from: datePicker.date)
         self.view.endEditing(true)
